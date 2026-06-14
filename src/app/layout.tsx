@@ -16,10 +16,33 @@ const greatVibes = Great_Vibes({
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://invitation.vicstack.uk"),
   title: "Joselin y Wilmer | Invitación de boda",
   description: "Invitación digital de boda.",
   icons: {
     icon: "/icon.svg",
+  },
+  openGraph: {
+    title: "Joselin y Wilmer | Invitación de boda",
+    description: "Invitación digital de boda.",
+    url: "https://invitation.vicstack.uk",
+    siteName: "Joselin y Wilmer",
+    images: [
+      {
+        url: "/og/wedding-preview.jpeg",
+        width: 1200,
+        height: 630,
+        alt: "Joselin y Wilmer | Invitación de boda",
+      },
+    ],
+    locale: "es_ES",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Joselin y Wilmer | Invitación de boda",
+    description: "Invitación digital de boda.",
+    images: ["/og/wedding-preview.jpeg"],
   },
 };
 
