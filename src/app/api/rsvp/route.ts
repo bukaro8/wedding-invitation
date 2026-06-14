@@ -22,6 +22,10 @@ const rsvpSchema = z.object({
   language: z.enum(["es", "en"]).default("es"),
 });
 
+const deleteRsvpSchema = z.object({
+  id: z.string().trim().min(1, "RSVP id is required."),
+});
+
 export async function POST(request: Request) {
   let body: unknown;
 
@@ -84,4 +88,60 @@ export async function GET(request: Request) {
   });
 
   return NextResponse.json({ rsvps });
+}
+
+export async function DELETE(request: Request) {
+  const adminSecret = process.env.ADMIN_SECRET;
+  const { searchParams } = new URL(request.url);
+
+  if (!adminSecret || searchParams.get("secret") !== adminSecret) {
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
+
+  let body: unknown;
+
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid JSON body." },
+      { status: 400 },
+    );
+  }
+
+  const result = deleteRsvpSchema.safeParse(body);
+
+  if (!result.success) {
+    return NextResponse.json(
+      {
+        error: "Invalid RSVP id.",
+        issues: z.flattenError(result.error).fieldErrors,
+      },
+      { status: 400 },
+    );
+  }
+
+  const existingRsvp = await prisma.rsvp.findUnique({
+    where: {
+      id: result.data.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!existingRsvp) {
+    return NextResponse.json(
+      { error: "RSVP record not found." },
+      { status: 404 },
+    );
+  }
+
+  await prisma.rsvp.delete({
+    where: {
+      id: result.data.id,
+    },
+  });
+
+  return NextResponse.json({ success: true, id: result.data.id });
 }

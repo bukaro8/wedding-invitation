@@ -18,13 +18,17 @@ export default function RsvpAdminPage() {
   const [secret, setSecret] = useState("");
   const [records, setRecords] = useState<RsvpRecord[]>([]);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState("");
+  const [recordToDelete, setRecordToDelete] = useState<RsvpRecord | null>(null);
   const [hasLoaded, setHasLoaded] = useState(false);
   const stats = getRsvpStats(records);
 
   const fetchRsvps = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
+    setNotice("");
     setIsLoading(true);
 
     try {
@@ -52,6 +56,60 @@ export default function RsvpAdminPage() {
       setRecords([]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const deleteText = getDeleteText(recordToDelete?.language);
+
+  const confirmDelete = async () => {
+    if (!recordToDelete) {
+      return;
+    }
+
+    setError("");
+    setNotice("");
+    setDeletingId(recordToDelete.id);
+
+    try {
+      const response = await fetch(
+        `/api/rsvp?secret=${encodeURIComponent(secret)}`,
+        {
+          body: JSON.stringify({ id: recordToDelete.id }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "DELETE",
+        },
+      );
+
+      if (response.status === 401) {
+        setError("Invalid admin secret.");
+        return;
+      }
+
+      if (response.status === 404) {
+        setError("RSVP record was not found.");
+        setRecords((currentRecords) =>
+          currentRecords.filter((record) => record.id !== recordToDelete.id),
+        );
+        setRecordToDelete(null);
+        return;
+      }
+
+      if (!response.ok) {
+        setError("Unable to delete RSVP record.");
+        return;
+      }
+
+      setRecords((currentRecords) =>
+        currentRecords.filter((record) => record.id !== recordToDelete.id),
+      );
+      setNotice(deleteText.success);
+      setRecordToDelete(null);
+    } catch {
+      setError(deleteText.error);
+    } finally {
+      setDeletingId("");
     }
   };
 
@@ -99,6 +157,11 @@ export default function RsvpAdminPage() {
               {error}
             </p>
           ) : null}
+          {notice ? (
+            <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800">
+              {notice}
+            </p>
+          ) : null}
         </form>
 
         {hasLoaded ? (
@@ -129,6 +192,7 @@ export default function RsvpAdminPage() {
                   <th className="px-5 py-4">Message</th>
                   <th className="px-5 py-4">Language</th>
                   <th className="px-5 py-4">Created</th>
+                  <th className="px-5 py-4">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#e3ebf6]">
@@ -149,6 +213,16 @@ export default function RsvpAdminPage() {
                     <td className="px-5 py-4 uppercase">{record.language}</td>
                     <td className="px-5 py-4">
                       {formatDate(record.createdAt)}
+                    </td>
+                    <td className="px-5 py-4">
+                      <button
+                        className="rounded-full border border-red-200 px-4 py-2 text-xs font-semibold text-red-700 transition hover:border-red-300 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={deletingId === record.id}
+                        onClick={() => setRecordToDelete(record)}
+                        type="button"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -189,6 +263,14 @@ export default function RsvpAdminPage() {
                   <AdminField label="Phone" value={record.phone || "-"} />
                   <AdminField label="Message" value={record.message || "-"} />
                 </dl>
+                <button
+                  className="mt-5 w-full rounded-full border border-red-200 bg-white px-4 py-3 text-sm font-semibold text-red-700 transition hover:border-red-300 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={deletingId === record.id}
+                  onClick={() => setRecordToDelete(record)}
+                  type="button"
+                >
+                  Delete
+                </button>
               </article>
             ))}
           </div>
@@ -206,6 +288,41 @@ export default function RsvpAdminPage() {
           ) : null}
         </section>
       </div>
+
+      {recordToDelete ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#071a33]/50 px-6">
+          <div
+            aria-modal="true"
+            className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl shadow-[#071a33]/25"
+            role="dialog"
+          >
+            <p className="text-lg font-semibold text-[#071a33]">
+              {deleteText.message}
+            </p>
+            <p className="mt-3 text-sm leading-6 text-[#42566f]">
+              {recordToDelete.fullName}
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+              <button
+                className="rounded-full border border-[#c7d6e8] px-5 py-3 text-sm font-semibold text-[#071a33] transition hover:bg-[#f8fbff]"
+                disabled={Boolean(deletingId)}
+                onClick={() => setRecordToDelete(null)}
+                type="button"
+              >
+                {deleteText.cancel}
+              </button>
+              <button
+                className="rounded-full bg-red-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-70"
+                disabled={Boolean(deletingId)}
+                onClick={confirmDelete}
+                type="button"
+              >
+                {deletingId ? `${deleteText.delete}...` : deleteText.delete}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
@@ -260,4 +377,24 @@ function formatDate(value: string) {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
+}
+
+function getDeleteText(language?: string) {
+  if (language === "en") {
+    return {
+      cancel: "Cancel",
+      delete: "Delete",
+      error: "Unable to delete RSVP.",
+      message: "Are you sure you want to delete this RSVP?",
+      success: "RSVP deleted successfully.",
+    };
+  }
+
+  return {
+    cancel: "Cancelar",
+    delete: "Eliminar",
+    error: "No se pudo eliminar la confirmación.",
+    message: "¿Seguro que deseas eliminar esta confirmación?",
+    success: "Confirmación eliminada correctamente.",
+  };
 }
