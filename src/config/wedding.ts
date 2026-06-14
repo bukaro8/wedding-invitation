@@ -1,8 +1,12 @@
 export type Language = "es" | "en";
 
 type LocalizedText = Record<Language, string>;
+type ItineraryItem = { time: string; title: string };
 
 export const weddingConfig = {
+  features: {
+    enableDigitalPass: false,
+  },
   audio: {
     songPath: "/audio/song.mp3",
   },
@@ -14,48 +18,73 @@ export const weddingConfig = {
       es: "Joselin y Wilmer",
       en: "Joselin and Wilmer",
     },
-    brideName: "Joselin",
-    groomName: "Wilmer",
+    brideName: "Joselin Rodriguez",
+    groomName: "Wilmer Ramirez",
   },
   date: {
-    targetDate: "2026-10-18T17:00:00",
+    targetDate: "2026-07-18T15:00:00+01:00",
     day: "18",
     monthYear: {
-      es: "Octubre 2026",
-      en: "October 2026",
+      es: "Julio 2026",
+      en: "July 2026",
     },
     full: {
-      es: "18 de octubre de 2026",
-      en: "October 18, 2026",
+      es: "18 de julio de 2026",
+      en: "18 July 2026",
+    },
+    rsvpDeadline: {
+      es: "10 de julio de 2026",
+      en: "10 July 2026",
     },
   },
   times: {
     ceremony: {
-      es: "17:00",
-      en: "5:00 PM",
+      es: "3:00 PM",
+      en: "3:00 PM",
     },
     reception: {
-      es: "18:00",
+      es: "6:00 PM",
       en: "6:00 PM",
     },
   },
   locations: {
     ceremony: {
-      name: "Hacienda Azul",
+      name: "George Meehan House and Haringey Register Office",
       address: {
-        es: "Dirección de ceremonia pendiente de confirmar",
-        en: "Ceremony address to be confirmed",
+        es: "N22 8JZ",
+        en: "N22 8JZ",
       },
-      googleMapsUrl: "https://maps.google.com/?q=Hacienda+Azul",
+      googleMapsUrl:
+        "https://www.google.com/maps/search/?api=1&query=George%20Meehan%20House%20and%20Haringey%20Register%20Office%20N22%208JZ",
     },
     reception: {
-      name: "Hacienda Azul",
+      name: "Recepción",
       address: {
-        es: "Dirección de recepción pendiente de confirmar",
-        en: "Reception address to be confirmed",
+        es: "19 Brantwood Rd, N17 0DT",
+        en: "19 Brantwood Rd, N17 0DT",
       },
-      googleMapsUrl: "https://maps.google.com/?q=Hacienda+Azul",
+      googleMapsUrl:
+        "https://www.google.com/maps/search/?api=1&query=19%20Brantwood%20Rd%2C%20N17%200DT",
     },
+  },
+  bibleQuote: {
+    es: "Así que ya no son dos, sino uno solo. Por tanto, lo que Dios ha unido, que no lo separe el hombre.",
+    en: "So they are no longer two, but one flesh. Therefore what God has joined together, let no one separate.",
+  },
+  romanticMessage: {
+    es: "Ambos escogimos juntar nuestras vidas. Yo me entrego a ti sabiendo que la magia de nuestro amor es caminar juntos en la prosperidad y la adversidad. Quiero ser tu cómplice y que tú seas el mío por el resto de la vida.",
+    en: "We both chose to join our lives together. I give myself to you knowing that the magic of our love is walking together through prosperity and adversity. I want to be your partner in everything, and for you to be mine for the rest of our lives.",
+  },
+  lovedOnes: {
+    brideParents: ["Magdalena Rodriguez Santos"],
+    groomParents: [
+      "Dilcia Aracely Alvarado Mendez",
+      "Edilberto Ramirez Godoy",
+    ],
+    witnesses: [
+      "Bernardine Pamela Interiano Williams",
+      "Edy Geovany Ramirez Alvarado",
+    ],
   },
   guest: {
     namePlaceholder: {
@@ -69,47 +98,32 @@ export const weddingConfig = {
   },
   dressCode: {
     notes: {
-      es: "Traje formal / vestido largo o midi",
-      en: "Formal suit / long or midi dress",
+      es: "Formal",
+      en: "Formal",
     },
   },
   gifts: {
     message: {
-      es: "Si deseas tener un detalle con nosotros, pronto compartiremos opciones de mesa de regalos y transferencia.",
-      en: "If you would like to send us a gift, registry and transfer details will be shared soon.",
+      es: "Si deseas bendecirnos, agradeceríamos regalos en efectivo.",
+      en: "If you would like to bless us, cash gifts would be greatly appreciated.",
     },
   },
   recommendations: {
     es: [
-      "Llegar con 20 minutos de anticipación.",
-      "Confirmar asistencia desde el formulario RSVP.",
-      "Llevar una identificación para el acceso.",
-      "Evitar tacones muy delgados si el jardín está disponible.",
+      "Recomendamos llegar al lugar de la ceremonia 20 minutos antes de la hora.",
     ],
     en: [
-      "Arrive 20 minutes early.",
-      "Confirm attendance through the RSVP form.",
-      "Bring an ID for access.",
-      "Avoid very thin heels if the garden area is open.",
+      "We recommend arriving at the ceremony venue 20 minutes before the scheduled time.",
     ],
   },
   itinerary: {
-    es: [
-      { time: "16:30", title: "Recepción de invitados" },
-      { time: "17:00", title: "Ceremonia" },
-      { time: "18:00", title: "Cóctel" },
-      { time: "19:30", title: "Cena" },
-      { time: "21:00", title: "Baile y celebración" },
-    ],
-    en: [
-      { time: "4:30 PM", title: "Guest arrival" },
-      { time: "5:00 PM", title: "Ceremony" },
-      { time: "6:00 PM", title: "Cocktail hour" },
-      { time: "7:30 PM", title: "Dinner" },
-      { time: "9:00 PM", title: "Dancing and celebration" },
-    ],
+    es: [] as ItineraryItem[],
+    en: [] as ItineraryItem[],
   },
 } satisfies {
+  features: {
+    enableDigitalPass: boolean;
+  };
   audio: {
     songPath: string;
   };
@@ -126,6 +140,7 @@ export const weddingConfig = {
     day: string;
     monthYear: LocalizedText;
     full: LocalizedText;
+    rsvpDeadline: LocalizedText;
   };
   times: {
     ceremony: LocalizedText;
@@ -143,6 +158,13 @@ export const weddingConfig = {
       googleMapsUrl: string;
     };
   };
+  bibleQuote: LocalizedText;
+  romanticMessage: LocalizedText;
+  lovedOnes: {
+    brideParents: string[];
+    groomParents: string[];
+    witnesses: string[];
+  };
   guest: {
     namePlaceholder: LocalizedText;
     reservedSeatsPlaceholder: LocalizedText;
@@ -154,5 +176,5 @@ export const weddingConfig = {
     message: LocalizedText;
   };
   recommendations: Record<Language, string[]>;
-  itinerary: Record<Language, { time: string; title: string }[]>;
+  itinerary: Record<Language, ItineraryItem[]>;
 };

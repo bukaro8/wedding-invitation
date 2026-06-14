@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { Countdown } from "@/components/countdown";
 import { EnvelopeGate } from "@/components/envelope-gate";
 import {
@@ -39,7 +40,7 @@ const translations = {
     weddingDay: weddingConfig.date.day,
     monthYear: weddingConfig.date.monthYear.es,
     eventType: "Ceremonia y celebración",
-    venue: "Lugar por confirmar",
+    venue: weddingConfig.locations.ceremony.name,
     dateEyebrow: "Fecha",
     dateTitle: "Falta poco para celebrar",
     countdownLabel: "Cuenta regresiva",
@@ -50,10 +51,32 @@ const translations = {
       seconds: "Segundos",
       completed: "La celebración ya comenzó.",
     },
+    storyEyebrow: "NUESTRA HISTORIA",
+    storyTitle: "Nuestra historia",
+    storySubtitle: weddingConfig.romanticMessage.es,
+    storyPrevious: "Foto anterior",
+    storyNext: "Siguiente foto",
+    storyGoToSlide: "Ver foto",
+    storyImages: [
+      "Joselin y Wilmer sonriendo juntos.",
+      "Joselin y Wilmer sentados junto al agua.",
+      "Joselin besa a Wilmer junto al mar.",
+      "Joselin y Wilmer frente a una iglesia.",
+      "Joselin y Wilmer compartiendo una cena.",
+      "Joselin y Wilmer en una noche especial.",
+    ],
+    lovedOnesEyebrow: "CON AMOR Y GRATITUD",
+    lovedOnesTitle: "Nuestros padres y testigos",
+    lovedOnesIntro:
+      "Con alegría honramos a quienes nos han acompañado, guiado y bendecido en este camino hacia nuestro matrimonio.",
+    brideParentsLabel: "Padres de Joselin",
+    groomParentsLabel: "Padres de Wilmer",
+    witnessesLabel: "Testigos",
+    witnessesSubtitle: "Padrinos",
     messageEyebrow: "Invitación",
     messageTitle: "Nos encantaría que nos acompañes",
-    invitationMessage:
-      "Estamos preparando una celebración íntima, elegante y llena de detalles. Tu presencia hará que este momento sea aún más especial para nosotros.",
+    bibleQuote: weddingConfig.bibleQuote.es,
+    invitationMessage: weddingConfig.romanticMessage.es,
     itineraryEyebrow: "Agenda",
     itineraryTitle: "Itinerario del evento",
     itinerary: weddingConfig.itinerary.es,
@@ -80,7 +103,7 @@ const translations = {
     rsvpEyebrow: "RSVP",
     rsvpTitle: "Confirmación de asistencia",
     rsvpDescription:
-      "Confirma si podrás acompañarnos. Esta información nos ayudará a preparar cada detalle de la celebración.",
+      `Confirma si podrás acompañarnos antes del ${weddingConfig.date.rsvpDeadline.es}. Esta información nos ayudará a preparar cada detalle de la celebración.`,
     rsvpForm: {
       description:
         "Completa tus datos y cuéntanos si asistirás. Puedes incluir un mensaje para los novios si lo deseas.",
@@ -137,7 +160,7 @@ const translations = {
     weddingDay: weddingConfig.date.day,
     monthYear: weddingConfig.date.monthYear.en,
     eventType: "Ceremony and celebration",
-    venue: "Venue to be confirmed",
+    venue: weddingConfig.locations.ceremony.name,
     dateEyebrow: "Date",
     dateTitle: "The celebration is getting closer",
     countdownLabel: "Countdown",
@@ -148,10 +171,32 @@ const translations = {
       seconds: "Seconds",
       completed: "The celebration has begun.",
     },
+    storyEyebrow: "OUR STORY",
+    storyTitle: "Our Story",
+    storySubtitle: weddingConfig.romanticMessage.en,
+    storyPrevious: "Previous photo",
+    storyNext: "Next photo",
+    storyGoToSlide: "View photo",
+    storyImages: [
+      "Joselin and Wilmer smiling together.",
+      "Joselin and Wilmer sitting by the water.",
+      "Joselin kisses Wilmer by the sea.",
+      "Joselin and Wilmer in front of a church.",
+      "Joselin and Wilmer sharing dinner.",
+      "Joselin and Wilmer on a special evening.",
+    ],
+    lovedOnesEyebrow: "WITH LOVE AND GRATITUDE",
+    lovedOnesTitle: "Our parents and witnesses",
+    lovedOnesIntro:
+      "With joy, we honour those who have accompanied, guided and blessed us on this journey towards our marriage.",
+    brideParentsLabel: "Joselin's parents",
+    groomParentsLabel: "Wilmer's parents",
+    witnessesLabel: "Witnesses",
+    witnessesSubtitle: "Godparents",
     messageEyebrow: "Invitation",
     messageTitle: "We would love to celebrate with you",
-    invitationMessage:
-      "We are preparing an intimate, elegant celebration filled with meaningful details. Your presence will make this moment even more special for us.",
+    bibleQuote: weddingConfig.bibleQuote.en,
+    invitationMessage: weddingConfig.romanticMessage.en,
     itineraryEyebrow: "Schedule",
     itineraryTitle: "Event itinerary",
     itinerary: weddingConfig.itinerary.en,
@@ -178,7 +223,7 @@ const translations = {
     rsvpEyebrow: "RSVP",
     rsvpTitle: "Attendance confirmation",
     rsvpDescription:
-      "Please confirm whether you will join us. This helps us prepare every detail of the celebration.",
+      `Please confirm whether you will join us by ${weddingConfig.date.rsvpDeadline.en}. This helps us prepare every detail of the celebration.`,
     rsvpForm: {
       description:
         "Share your details and let us know if you will attend. You can also leave a message for the couple.",
@@ -241,14 +286,15 @@ export default function Home() {
       <EnvelopeGate openLabel={t.openInvitation}>
         <HeroSection t={t} />
         <DateSection t={t} />
+        <StorySection t={t} />
+        <LovedOnesSection t={t} />
         <InvitationMessage t={t} />
-        <ItinerarySection t={t} />
         <LocationSection language={language} t={t} />
         <DressCodeSection t={t} />
         <GiftsSection t={t} />
         <RecommendationsSection t={t} />
         <RsvpSection language={language} t={t} />
-        <PdfPassSection t={t} />
+        {weddingConfig.features.enableDigitalPass ? <PdfPassSection t={t} /> : null}
         <Footer t={t} />
       </EnvelopeGate>
     </main>
@@ -256,6 +302,15 @@ export default function Home() {
 }
 
 type Translation = (typeof translations)[Language];
+
+const storyImages = [
+  "/images/couple/hero.jpg",
+  "/images/couple/gallery-1.jpg",
+  "/images/couple/gallery-2.jpg",
+  "/images/couple/gallery-3.jpg",
+  "/images/couple/gallery-4.jpg",
+  "/images/couple/gallery-5.jpg",
+];
 
 function HeroSection({ t }: { t: Translation }) {
   return (
@@ -266,13 +321,17 @@ function HeroSection({ t }: { t: Translation }) {
           {t.heroEyebrow}
         </p>
 
-        <h1 className="font-script text-7xl font-normal leading-[0.95] text-[#173a5e] sm:text-8xl lg:text-9xl">
+        <h1 className="font-script text-6xl font-normal leading-[1.15] text-[#173a5e] sm:text-7xl lg:text-8xl">
           <span className="sr-only">{t.heroTitle}</span>
-          <span aria-hidden="true">{t.brideName}</span>
-          <span className="block text-6xl text-[#c9a45c] sm:text-7xl lg:text-8xl">
+          <span aria-hidden="true" className="block">
+            {t.brideName}
+          </span>
+          <span className="my-2 block text-5xl leading-none text-[#c9a45c] sm:my-3 sm:text-6xl lg:text-7xl">
             &
           </span>
-          <span aria-hidden="true">{t.groomName}</span>
+          <span aria-hidden="true" className="block">
+            {t.groomName}
+          </span>
         </h1>
 
         <div className="mt-7 flex justify-center">
@@ -345,6 +404,194 @@ function DateSection({ t }: { t: Translation }) {
   );
 }
 
+function StorySection({ t }: { t: Translation }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (isPaused) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setActiveIndex((currentIndex) => (currentIndex + 1) % storyImages.length);
+    }, 6000);
+
+    return () => window.clearInterval(intervalId);
+  }, [isPaused]);
+
+  const selectSlide = (index: number) => {
+    setIsPaused(true);
+    setActiveIndex(index);
+  };
+
+  const showPrevious = () => {
+    setIsPaused(true);
+    setActiveIndex(
+      (currentIndex) =>
+        (currentIndex - 1 + storyImages.length) % storyImages.length,
+    );
+  };
+
+  const showNext = () => {
+    setIsPaused(true);
+    setActiveIndex((currentIndex) => (currentIndex + 1) % storyImages.length);
+  };
+
+  const handleTouchEnd = (touchEndX: number) => {
+    if (touchStartX === null) {
+      return;
+    }
+
+    const swipeDistance = touchStartX - touchEndX;
+
+    if (Math.abs(swipeDistance) > 48) {
+      if (swipeDistance > 0) {
+        showNext();
+      } else {
+        showPrevious();
+      }
+    }
+
+    setTouchStartX(null);
+  };
+
+  return (
+    <WeddingSection
+      eyebrow={t.storyEyebrow}
+      title={t.storyTitle}
+      className="bg-[#fbf8f1]"
+    >
+      <div className="mx-auto max-w-4xl">
+        <p className="mx-auto max-w-3xl text-center text-[1.08rem] leading-8 text-[#42566f]">
+          {t.storySubtitle}
+        </p>
+
+        <InfoCard className="mx-auto mt-10 overflow-hidden rounded-[2rem] p-3 sm:p-4">
+          <div
+            className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-[#fffdf8] md:aspect-video"
+            onMouseEnter={() => setIsPaused(true)}
+            onTouchStart={(event) => {
+              setIsPaused(true);
+              setTouchStartX(event.changedTouches[0]?.clientX ?? null);
+            }}
+            onTouchEnd={(event) => {
+              handleTouchEnd(event.changedTouches[0]?.clientX ?? 0);
+            }}
+          >
+            {storyImages.map((src, index) => (
+              <Image
+                key={src}
+                alt={t.storyImages[index]}
+                className={`object-cover transition-opacity duration-700 ease-out ${
+                  index === activeIndex ? "opacity-100" : "opacity-0"
+                }`}
+                fill
+                priority={index === 0}
+                sizes="(min-width: 768px) 896px, calc(100vw - 3.5rem)"
+                src={src}
+              />
+            ))}
+
+            <button
+              aria-label={t.storyPrevious}
+              className="absolute left-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#eadcc2] bg-[#fffdf8]/85 text-2xl leading-none text-[#173a5e] shadow-lg shadow-[#173a5e]/10 backdrop-blur transition hover:border-[#c9a45c] md:flex"
+              onClick={showPrevious}
+              type="button"
+            >
+              &lt;
+            </button>
+            <button
+              aria-label={t.storyNext}
+              className="absolute right-4 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#eadcc2] bg-[#fffdf8]/85 text-2xl leading-none text-[#173a5e] shadow-lg shadow-[#173a5e]/10 backdrop-blur transition hover:border-[#c9a45c] md:flex"
+              onClick={showNext}
+              type="button"
+            >
+              &gt;
+            </button>
+          </div>
+
+          <div className="mt-5 flex items-center justify-center gap-2">
+            {storyImages.map((src, index) => (
+              <button
+                key={src}
+                aria-label={`${t.storyGoToSlide} ${index + 1}`}
+                aria-current={index === activeIndex ? "true" : undefined}
+                className={`h-2.5 rounded-full transition-all ${
+                  index === activeIndex
+                    ? "w-8 bg-[#c9a45c]"
+                    : "w-2.5 bg-[#d9bf82]/45 hover:bg-[#d9bf82]"
+                }`}
+                onClick={() => selectSlide(index)}
+                type="button"
+              />
+            ))}
+          </div>
+        </InfoCard>
+      </div>
+    </WeddingSection>
+  );
+}
+
+function LovedOnesSection({ t }: { t: Translation }) {
+  const groups = [
+    {
+      label: t.brideParentsLabel,
+      names: weddingConfig.lovedOnes.brideParents,
+    },
+    {
+      label: t.groomParentsLabel,
+      names: weddingConfig.lovedOnes.groomParents,
+    },
+    {
+      label: t.witnessesLabel,
+      names: weddingConfig.lovedOnes.witnesses,
+      subtitle: t.witnessesSubtitle,
+    },
+  ];
+
+  return (
+    <WeddingSection
+      eyebrow={t.lovedOnesEyebrow}
+      title={t.lovedOnesTitle}
+      className="bg-[#fffdf8]"
+    >
+      <div className="mx-auto max-w-5xl">
+        <p className="mx-auto max-w-3xl text-center text-[1.08rem] leading-8 text-[#42566f]">
+          {t.lovedOnesIntro}
+        </p>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {groups.map((group) => (
+            <InfoCard key={group.label} className="text-center">
+              <HeartShineIcon className="invitation-icon-gold mx-auto mb-5 h-14 w-14 md:h-16 md:w-16" />
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8f7747]">
+                {group.label}
+              </p>
+              {group.subtitle ? (
+                <p className="mt-2 font-script text-4xl font-normal text-[#c9a45c]">
+                  {group.subtitle}
+                </p>
+              ) : null}
+              <div className="mt-5 space-y-3">
+                {group.names.map((name) => (
+                  <p
+                    key={name}
+                    className="text-[1.08rem] font-medium leading-7 text-[#173a5e]"
+                  >
+                    {name}
+                  </p>
+                ))}
+              </div>
+            </InfoCard>
+          ))}
+        </div>
+      </div>
+    </WeddingSection>
+  );
+}
+
 function InvitationMessage({ t }: { t: Translation }) {
   return (
     <WeddingSection
@@ -352,7 +599,10 @@ function InvitationMessage({ t }: { t: Translation }) {
       title={t.messageTitle}
       className="bg-[#fbf8f1]"
     >
-      <p className="mx-auto max-w-3xl text-center text-[1.08rem] leading-8 text-[#42566f]">
+      <p className="mx-auto max-w-3xl text-center text-[1.08rem] italic leading-8 text-[#42566f]">
+        {t.bibleQuote}
+      </p>
+      <p className="mx-auto mt-6 max-w-3xl text-center text-[1.08rem] leading-8 text-[#42566f]">
         {t.invitationMessage}
       </p>
     </WeddingSection>
@@ -599,9 +849,21 @@ function PdfPassSection({ t }: { t: Translation }) {
 function Footer({ t }: { t: Translation }) {
   return (
     <footer className="bg-[#173a5e] px-6 py-12 text-center text-white sm:px-10">
-      <WeddingRingsIcon className="invitation-icon-white mx-auto mb-4 h-16 w-16 md:h-24 md:w-24" />
+      <WeddingRingsIcon className="invitation-icon-gold mx-auto mb-4 h-16 w-16 md:h-24 md:w-24" />
       <p className="font-script text-4xl font-normal">{t.footerText}</p>
       <p className="mt-3 text-sm text-white/70">{t.footerNote}</p>
+      <p className="mt-8 text-xs text-white/60">
+        Desarrollado con <span className="text-[#c9a45c]">♥</span> por{" "}
+        <a
+          aria-label="Visit VicStack portfolio"
+          className="font-medium text-[#c9a45c]/85 transition hover:text-[#c9a45c] hover:underline"
+          href="https://portfolio.vicstack.uk"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          VicStack
+        </a>
+      </p>
     </footer>
   );
 }

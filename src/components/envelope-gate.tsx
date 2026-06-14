@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import Image from "next/image";
 import { EnvelopeClosedIcon, EnvelopeOpenIcon, WaxSealIcon } from "@/components/icons";
+import flowersCorner from "@/components/icons/flowers-corner.png";
 
 type EnvelopeGateProps = {
   children: React.ReactNode;
@@ -37,7 +39,7 @@ export function EnvelopeGate({ children, openLabel }: EnvelopeGateProps) {
         {!isOpen ? (
           <motion.section
             aria-label={openLabel}
-            className="grid min-h-screen place-items-center overflow-hidden bg-[#fbf8f1] px-6 py-20 text-center text-[#183653]"
+            className="relative isolate grid min-h-screen place-items-center overflow-hidden bg-[#fbf8f1] px-6 py-20 text-center text-[#183653]"
             exit={
               shouldReduceMotion
                 ? { opacity: 0 }
@@ -45,7 +47,22 @@ export function EnvelopeGate({ children, openLabel }: EnvelopeGateProps) {
             }
             transition={{ duration: 0.35, ease: "easeOut" }}
           >
-            <div className="relative mx-auto flex w-full max-w-md flex-col items-center">
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute left-0 top-0 -z-10 h-auto w-[11.25rem] scale-y-[-1] select-none min-[375px]:w-[12.6rem] sm:w-[16.8rem] lg:w-[25.2rem]"
+              priority
+              src={flowersCorner}
+            />
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute bottom-0 right-0 -z-10 h-auto w-[11.25rem] scale-x-[-1] select-none opacity-65 min-[375px]:w-[12.6rem] sm:w-[16.8rem] lg:w-[25.2rem]"
+              priority
+              src={flowersCorner}
+            />
+
+            <div className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center">
               <motion.div
                 animate={
                   isOpening && !shouldReduceMotion

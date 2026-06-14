@@ -29,65 +29,58 @@ body {
   font-family: var(--font-great-vibes), "Brush Script MT", cursive;
 }
 
+.invitation-icon,
+.invitation-icon-gold,
+.invitation-icon-fill-gold {
+  color: #c9a45c;
+}
+
 .invitation-icon svg,
+.invitation-icon-gold svg,
 .invitation-icon path,
+.invitation-icon-gold path,
 .invitation-icon circle,
+.invitation-icon-gold circle,
 .invitation-icon rect,
+.invitation-icon-gold rect,
 .invitation-icon line,
+.invitation-icon-gold line,
 .invitation-icon polyline,
-.invitation-icon polygon {
+.invitation-icon-gold polyline,
+.invitation-icon polygon,
+.invitation-icon-gold polygon,
+.invitation-icon ellipse,
+.invitation-icon-gold ellipse {
   stroke: #c9a45c;
 }
 
 .invitation-icon svg:not([fill="none"]) path:not([fill="none"]),
-.invitation-icon svg:not([fill="none"]) circle:not([fill="none"]),
-.invitation-icon svg:not([fill="none"]) rect:not([fill="none"]),
-.invitation-icon svg:not([fill="none"]) polygon:not([fill="none"]) {
-  fill: #c9a45c;
-}
-
-.invitation-icon-gold svg,
-.invitation-icon-gold path,
-.invitation-icon-gold circle,
-.invitation-icon-gold rect,
-.invitation-icon-gold line,
-.invitation-icon-gold polyline,
-.invitation-icon-gold polygon {
-  stroke: #c9a45c;
-}
-
 .invitation-icon-gold svg:not([fill="none"]) path:not([fill="none"]),
+.invitation-icon svg:not([fill="none"]) circle:not([fill="none"]),
 .invitation-icon-gold svg:not([fill="none"]) circle:not([fill="none"]),
+.invitation-icon svg:not([fill="none"]) rect:not([fill="none"]),
 .invitation-icon-gold svg:not([fill="none"]) rect:not([fill="none"]),
-.invitation-icon-gold svg:not([fill="none"]) polygon:not([fill="none"]) {
+.invitation-icon svg:not([fill="none"]) polygon:not([fill="none"]),
+.invitation-icon-gold svg:not([fill="none"]) polygon:not([fill="none"]),
+.invitation-icon svg:not([fill="none"]) ellipse:not([fill="none"]),
+.invitation-icon-gold svg:not([fill="none"]) ellipse:not([fill="none"]) {
   fill: #c9a45c;
 }
 
 .invitation-icon-fill-gold path,
 .invitation-icon-fill-gold circle,
 .invitation-icon-fill-gold rect,
-.invitation-icon-fill-gold polygon {
+.invitation-icon-fill-gold polygon,
+.invitation-icon-fill-gold ellipse {
   fill: #c9a45c;
   stroke: none;
 }
 
+.invitation-icon-fill-gold line,
+.invitation-icon-fill-gold polyline {
+  stroke: #c9a45c;
+}
+
 .invitation-icon-fill-gold [fill-opacity="0"] {
   fill: transparent;
-}
-
-.invitation-icon-white svg,
-.invitation-icon-white path,
-.invitation-icon-white circle,
-.invitation-icon-white rect,
-.invitation-icon-white line,
-.invitation-icon-white polyline,
-.invitation-icon-white polygon {
-  stroke: #ffffff;
-}
-
-.invitation-icon-white svg:not([fill="none"]) path:not([fill="none"]),
-.invitation-icon-white svg:not([fill="none"]) circle:not([fill="none"]),
-.invitation-icon-white svg:not([fill="none"]) rect:not([fill="none"]),
-.invitation-icon-white svg:not([fill="none"]) polygon:not([fill="none"]) {
-  fill: #ffffff;
 }
