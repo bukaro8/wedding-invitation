@@ -18,6 +18,9 @@ const greatVibes = Great_Vibes({
 export const metadata: Metadata = {
   title: "Joselin y Wilmer | Invitación de boda",
   description: "Invitación digital de boda.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
