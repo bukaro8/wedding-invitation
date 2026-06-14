@@ -1,0 +1,9 @@
+export { CalendarHeartIcon } from "./CalendarHeartIcon";
+export { DressCodeIcon } from "./DressCodeIcon";
+export { EnvelopeClosedIcon } from "./EnvelopeClosedIcon";
+export { EnvelopeOpenIcon } from "./EnvelopeOpenIcon";
+export { FrameIcon } from "./FrameIcon";
+export { PlayMusicIcon } from "./PlayMusicIcon";
+export { StopMusicIcon } from "./StopMusicIcon";
+export { WaxSealIcon } from "./WaxSealIcon";
+export { WeddingRingsIcon } from "./WeddingRingsIcon";

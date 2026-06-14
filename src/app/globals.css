@@ -1,18 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fbff;
-  --foreground: #0b1f3a;
+  --background: #fbf8f1;
+  --foreground: #183653;
+  --navy-soft: #173a5e;
+  --champagne: #c9a45c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-cormorant);
+  --font-serif: var(--font-cormorant);
+  --font-script: var(--font-great-vibes);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+.font-script {
+  font-family: var(--font-great-vibes), "Brush Script MT", cursive;
 }
