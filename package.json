@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "22.12.x"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "next dev --webpack",
+    "postinstall": "prisma generate",
+    "prebuild": "prisma generate",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
