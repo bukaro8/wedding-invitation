@@ -9,7 +9,7 @@ export function DressCodeIcon({ className = "h-20 w-28" }: DressCodeIconProps) {
   return (
     <div
       aria-hidden="true"
-      className={`inline-flex items-end justify-center gap-2 text-[#c9a45c] [&_svg]:h-full [&_svg]:w-auto [&_svg]:fill-current ${className}`}
+      className={`inline-flex items-end justify-center gap-2 [&_svg]:h-full [&_svg]:w-auto ${className}`}
     >
       <DressMan className="max-w-[45%]" />
       <DressWoman className="max-w-[48%]" />

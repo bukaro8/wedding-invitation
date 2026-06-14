@@ -1,7 +1,7 @@
 "use client";
 
-import { Music, Pause } from "lucide-react";
 import { useRef, useState } from "react";
+import { PlayMusicIcon, StopMusicIcon } from "@/components/icons";
 
 type MusicButtonProps = {
   labels: {
@@ -45,9 +45,9 @@ export function MusicButton({ labels, src }: MusicButtonProps) {
         className="inline-flex items-center justify-center gap-2 rounded-full border border-[#d9bf82] bg-[#fffdf8]/90 px-5 py-2.5 text-sm font-semibold text-[#173a5e] shadow-lg shadow-[#173a5e]/10 backdrop-blur transition hover:border-[#c9a45c] hover:bg-[#fffdf8]"
       >
         {isPlaying ? (
-          <Pause className="size-4 text-[#c9a45c]" aria-hidden="true" />
+          <StopMusicIcon className="invitation-icon h-5 w-5" />
         ) : (
-          <Music className="size-4 text-[#c9a45c]" aria-hidden="true" />
+          <PlayMusicIcon className="invitation-icon h-5 w-5" />
         )}
         {isPlaying ? labels.pause : labels.play}
       </button>

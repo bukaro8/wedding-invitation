@@ -3,15 +3,15 @@
 import { useState } from "react";
 import { Countdown } from "@/components/countdown";
 import {
-  CalendarOrnament,
-  ClockOrnament,
-  GiftOrnament,
-  LocationOrnament,
-  NoteOrnament,
-  RsvpOrnament,
-  TicketOrnament,
-} from "@/components/decorative-icons";
-import { DressCodeIcon } from "@/components/icons";
+  CalendarHeartIcon,
+  CardEnvelopeIcon,
+  ClockIcon,
+  DressCodeIcon,
+  HeartShineIcon,
+  MapLocationIcon,
+  MessageReplyIcon,
+  WeddingRingsIcon,
+} from "@/components/icons";
 import { MusicButton } from "@/components/music-button";
 import { RsvpForm } from "@/components/rsvp-form";
 import { InfoCard, WeddingSection } from "@/components/wedding-section";
@@ -293,7 +293,7 @@ function HeroSection({ t }: { t: Translation }) {
 
       <InfoCard className="mt-14 w-full max-w-sm rounded-[2rem] p-7 lg:mt-0">
         <div className="rounded-[1.5rem] border border-[#eadcc2] px-7 py-12 text-center">
-          <RsvpOrnament className="mx-auto mb-8 h-24 w-24 text-[#c9a45c]" />
+          <CalendarHeartIcon className="invitation-icon-gold mx-auto mb-8 h-16 w-16 md:h-24 md:w-24" />
 
           <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-[#8f7747]">
             {t.saveTheDate}
@@ -324,7 +324,7 @@ function DateSection({ t }: { t: Translation }) {
       className="bg-[#fffdf8]"
     >
       <InfoCard className="mx-auto max-w-3xl text-center">
-        <CalendarOrnament />
+        <CalendarHeartIcon className="invitation-icon-gold mx-auto mb-5 h-16 w-16 md:h-24 md:w-24" />
         <p className="text-xl font-medium text-[#173a5e]">
           {t.weddingDate}
         </p>
@@ -367,7 +367,7 @@ function ItinerarySection({ t }: { t: Translation }) {
             key={`${item.time}-${item.title}`}
             className="flex items-center gap-6"
           >
-            <ClockOrnament className="h-16 w-16 shrink-0 text-[#c9a45c]" />
+            <ClockIcon className="invitation-icon-gold h-16 w-16 shrink-0 md:h-20 md:w-20" />
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8f7747]">
                 {item.time}
@@ -416,7 +416,7 @@ function LocationSection({
       <div className="grid gap-6 md:grid-cols-2">
         {locations.map((location) => (
           <InfoCard key={location.label}>
-            <LocationOrnament />
+            <MapLocationIcon className="invitation-icon-fill-gold mx-auto mb-5 h-16 w-16 md:h-24 md:w-24" />
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8f7747]">
               {location.label}
             </p>
@@ -457,7 +457,7 @@ function DressCodeSection({ t }: { t: Translation }) {
       className="bg-[#fffdf8]"
     >
       <InfoCard className="mx-auto max-w-3xl text-center">
-        <DressCodeIcon className="mx-auto mb-5 h-24 w-32 text-[#c9a45c] md:h-28 md:w-40" />
+        <DressCodeIcon className="invitation-icon-gold mx-auto mb-5 h-24 w-32 md:h-28 md:w-40" />
         <p className="text-[1.08rem] leading-8 text-[#42566f]">
           {t.dressDescription}
         </p>
@@ -477,7 +477,7 @@ function GiftsSection({ t }: { t: Translation }) {
       className="bg-[#fbf8f1]"
     >
       <InfoCard className="mx-auto max-w-3xl text-center">
-        <GiftOrnament />
+        <HeartShineIcon className="invitation-icon-gold mx-auto mb-5 h-16 w-16 md:h-24 md:w-24" />
         <p className="text-[1.08rem] leading-8 text-[#42566f]">
           {t.giftsDescription}
         </p>
@@ -497,14 +497,18 @@ function RecommendationsSection({ t }: { t: Translation }) {
       className="bg-[#fffdf8]"
     >
       <div className="grid gap-5 md:grid-cols-2">
-        {t.recommendations.map((recommendation) => (
-          <InfoCard key={recommendation} className="flex gap-5">
-            <NoteOrnament className="mt-0.5 h-12 w-12 shrink-0 text-[#c9a45c]" />
-            <p className="text-[1.05rem] leading-8 text-[#42566f]">
-              {recommendation}
-            </p>
-          </InfoCard>
-        ))}
+        {t.recommendations.map((recommendation, index) => {
+          const RecommendationIcon = index === 1 ? MessageReplyIcon : ClockIcon;
+
+          return (
+            <InfoCard key={recommendation} className="flex gap-5">
+              <RecommendationIcon className="invitation-icon-gold mt-0.5 h-12 w-12 shrink-0 md:h-14 md:w-14" />
+              <p className="text-[1.05rem] leading-8 text-[#42566f]">
+                {recommendation}
+              </p>
+            </InfoCard>
+          );
+        })}
       </div>
     </WeddingSection>
   );
@@ -524,7 +528,7 @@ function RsvpSection({
       className="bg-[#fbf8f1]"
     >
       <InfoCard className="mx-auto max-w-3xl">
-        <RsvpOrnament />
+        <MessageReplyIcon className="invitation-icon-gold mx-auto mb-5 h-16 w-16 md:h-24 md:w-24" />
         <p className="text-[1.08rem] leading-8 text-[#42566f]">
           {t.rsvpDescription}
         </p>
@@ -551,7 +555,7 @@ function PdfPassSection({ t }: { t: Translation }) {
         <InfoCard className="rounded-[2rem]">
           <div className="rounded-[1.5rem] border border-dashed border-[#d9bf82] bg-[#fbf8f1] p-7">
             <div className="flex items-center justify-between gap-4">
-              <TicketOrnament className="h-20 w-20 text-[#c9a45c]" />
+              <CardEnvelopeIcon className="invitation-icon-fill-gold h-16 w-16 md:h-24 md:w-24" />
               <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-[#8f7747]">
                 PDF
               </p>
@@ -590,6 +594,7 @@ function PdfPassSection({ t }: { t: Translation }) {
 function Footer({ t }: { t: Translation }) {
   return (
     <footer className="bg-[#173a5e] px-6 py-12 text-center text-white sm:px-10">
+      <WeddingRingsIcon className="invitation-icon-white mx-auto mb-4 h-16 w-16 md:h-24 md:w-24" />
       <p className="font-script text-4xl font-normal">{t.footerText}</p>
       <p className="mt-3 text-sm text-white/70">{t.footerNote}</p>
     </footer>

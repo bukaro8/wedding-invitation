@@ -1,8 +1,13 @@
 export { CalendarHeartIcon } from "./CalendarHeartIcon";
+export { CardEnvelopeIcon } from "./CardEnvelopeIcon";
+export { ClockIcon } from "./ClockIcon";
 export { DressCodeIcon } from "./DressCodeIcon";
 export { EnvelopeClosedIcon } from "./EnvelopeClosedIcon";
 export { EnvelopeOpenIcon } from "./EnvelopeOpenIcon";
 export { FrameIcon } from "./FrameIcon";
+export { HeartShineIcon } from "./HeartShineIcon";
+export { MapLocationIcon } from "./MapLocationIcon";
+export { MessageReplyIcon } from "./MessageReplyIcon";
 export { PlayMusicIcon } from "./PlayMusicIcon";
 export { StopMusicIcon } from "./StopMusicIcon";
 export { WaxSealIcon } from "./WaxSealIcon";
