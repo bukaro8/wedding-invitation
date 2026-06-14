@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Countdown } from "@/components/countdown";
+import { EnvelopeGate } from "@/components/envelope-gate";
 import {
   CalendarHeartIcon,
   CardEnvelopeIcon,
@@ -21,6 +22,7 @@ const translations = {
   es: {
     languageLabel: "English",
     ariaLanguageLabel: "Cambiar idioma a inglés",
+    openInvitation: "Abrir invitación",
     music: {
       play: "Reproducir",
       pause: "Detener",
@@ -118,6 +120,7 @@ const translations = {
   en: {
     languageLabel: "Español",
     ariaLanguageLabel: "Switch language to Spanish",
+    openInvitation: "Open invitation",
     music: {
       play: "Play",
       pause: "Stop",
@@ -235,17 +238,19 @@ export default function Home() {
         </button>
       </div>
 
-      <HeroSection t={t} />
-      <DateSection t={t} />
-      <InvitationMessage t={t} />
-      <ItinerarySection t={t} />
-      <LocationSection language={language} t={t} />
-      <DressCodeSection t={t} />
-      <GiftsSection t={t} />
-      <RecommendationsSection t={t} />
-      <RsvpSection language={language} t={t} />
-      <PdfPassSection t={t} />
-      <Footer t={t} />
+      <EnvelopeGate openLabel={t.openInvitation}>
+        <HeroSection t={t} />
+        <DateSection t={t} />
+        <InvitationMessage t={t} />
+        <ItinerarySection t={t} />
+        <LocationSection language={language} t={t} />
+        <DressCodeSection t={t} />
+        <GiftsSection t={t} />
+        <RecommendationsSection t={t} />
+        <RsvpSection language={language} t={t} />
+        <PdfPassSection t={t} />
+        <Footer t={t} />
+      </EnvelopeGate>
     </main>
   );
 }
