@@ -22,7 +22,7 @@ export const weddingConfig = {
     groomName: "Wilmer Ramirez",
   },
   date: {
-    targetDate: "2026-07-18T15:00:00+01:00",
+    targetDate: "2026-07-18T16:00:00+01:00",
     day: "18",
     monthYear: {
       es: "Julio 2026",
@@ -37,10 +37,18 @@ export const weddingConfig = {
       en: "10 July 2026",
     },
   },
+  calendar: {
+    startDateTime: "20260718T160000",
+    endDateTime: "20260718T200000",
+    timezone: "Europe/London",
+    location: "George Meehan House and Haringey Register Office, N22 8JZ",
+    description: "Ceremonia y celebración de Joselin y Wilmer.",
+    fileName: "boda-joselin-wilmer.ics",
+  },
   times: {
     ceremony: {
-      es: "3:00 PM",
-      en: "3:00 PM",
+      es: "4:00 PM",
+      en: "4:00 PM",
     },
     reception: {
       es: "6:00 PM",
@@ -141,6 +149,14 @@ export const weddingConfig = {
     monthYear: LocalizedText;
     full: LocalizedText;
     rsvpDeadline: LocalizedText;
+  };
+  calendar: {
+    startDateTime: string;
+    endDateTime: string;
+    timezone: string;
+    location: string;
+    description: string;
+    fileName: string;
   };
   times: {
     ceremony: LocalizedText;

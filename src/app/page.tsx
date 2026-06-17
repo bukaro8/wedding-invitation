@@ -37,6 +37,8 @@ const translations = {
     weddingDate: weddingConfig.date.full.es,
     viewInvitation: "Ver invitación",
     saveTheDate: "Guardar la fecha",
+    addToCalendar: "Añadir al calendario",
+    calendarTitle: "Boda de Joselin y Wilmer",
     weddingDay: weddingConfig.date.day,
     monthYear: weddingConfig.date.monthYear.es,
     eventType: "Ceremonia y celebración",
@@ -157,6 +159,8 @@ const translations = {
     weddingDate: weddingConfig.date.full.en,
     viewInvitation: "View invitation",
     saveTheDate: "Save the date",
+    addToCalendar: "Add to calendar",
+    calendarTitle: "Joselin and Wilmer's Wedding",
     weddingDay: weddingConfig.date.day,
     monthYear: weddingConfig.date.monthYear.en,
     eventType: "Ceremony and celebration",
@@ -312,6 +316,66 @@ const storyImages = [
   "/images/couple/gallery-5.jpg",
 ];
 
+type CalendarEvent = {
+  description: string;
+  endDateTime: string;
+  location: string;
+  startDateTime: string;
+  timezone: string;
+  title: string;
+};
+
+function escapeIcsText(value: string) {
+  return value
+    .replace(/\\/g, "\\\\")
+    .replace(/\n/g, "\\n")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,");
+}
+
+function generateIcsContent(event: CalendarEvent) {
+  const timestamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Joselin and Wilmer Wedding//Invitation//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    `UID:joselin-wilmer-wedding-20260718@vicstack.uk`,
+    `DTSTAMP:${timestamp}`,
+    `DTSTART;TZID=${event.timezone}:${event.startDateTime}`,
+    `DTEND;TZID=${event.timezone}:${event.endDateTime}`,
+    `SUMMARY:${escapeIcsText(event.title)}`,
+    `DESCRIPTION:${escapeIcsText(event.description)}`,
+    `LOCATION:${escapeIcsText(event.location)}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+}
+
+function downloadCalendarFile(title: string) {
+  const icsContent = generateIcsContent({
+    description: weddingConfig.calendar.description,
+    endDateTime: weddingConfig.calendar.endDateTime,
+    location: weddingConfig.calendar.location,
+    startDateTime: weddingConfig.calendar.startDateTime,
+    timezone: weddingConfig.calendar.timezone,
+    title,
+  });
+  const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = weddingConfig.calendar.fileName;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
+}
+
 function HeroSection({ t }: { t: Translation }) {
   return (
     // TODO: Future feature: animated envelope opening interaction.
@@ -372,7 +436,17 @@ function HeroSection({ t }: { t: Translation }) {
           <p className="text-[1.05rem] leading-8 text-[#42566f]">
             {t.eventType}
             <span className="block font-medium text-[#173a5e]">{t.venue}</span>
+            <span className="mt-2 block text-sm font-semibold uppercase tracking-[0.22em] text-[#8f7747]">
+              {t.ceremonyTime}
+            </span>
           </p>
+          <button
+            className="mt-7 rounded-full border border-[#d9bf82] bg-[#fffdf8] px-5 py-3 text-sm font-semibold text-[#173a5e] shadow-lg shadow-[#173a5e]/10 transition hover:border-[#c9a45c] hover:bg-[#fbf8f1]"
+            onClick={() => downloadCalendarFile(t.calendarTitle)}
+            type="button"
+          >
+            {t.addToCalendar}
+          </button>
         </div>
       </InfoCard>
     </section>
